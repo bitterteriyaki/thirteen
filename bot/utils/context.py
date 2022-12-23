@@ -26,6 +26,17 @@ class ThirteenContext(Context):
     :class:`discord.ext.commands.Context` and adds some utility methods.
     """
 
+    @property
+    def db(self):
+        """Returns the database connection engine.
+
+        Returns
+        -------
+        :class:`sqlalchemy.ext.asyncio.AsyncEngine`
+            The database connection engine.
+        """
+        return self.bot.db
+
     def get_embed(self, content):
         """This method is a factory method that creates an embed with
         the given content. The embed is created with the default color

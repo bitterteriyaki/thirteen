@@ -4,3 +4,10 @@ services:
     command: python launcher.py
     volumes:
       - .:/bot
+  database:
+    image: postgres
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+
+volumes:
+  postgresql:

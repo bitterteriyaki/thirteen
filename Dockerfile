@@ -7,16 +7,19 @@ ENV \
   # pip:
   PIP_NO_CACHE_DIR=1 \
   # poetry:
-  POETRY_VIRTUALENVS_CREATE=false
+  POETRY_VERSION=1.3.1 \
+  POETRY_NO_INTERACTION=1 \
+  POETRY_VIRTUALENVS_CREATE=false \
+  POETRY_HOME='/usr/local'
 
 RUN \
   apt-get update \
-  && apt-get upgrade \
+  && apt-get upgrade -y \
   && apt-get install -y \
     curl \
     postgresql-client \
   # installing poetry:
-  && curl -sSL 'https://install.python-poetry.org' | python - \
+  && curl -sSL "https://install.python-poetry.org" | python - \
   && poetry --version
 
 WORKDIR /bot

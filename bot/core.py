@@ -23,6 +23,7 @@ from rich.box import ROUNDED
 
 from bot.utils.extensions import get_extensions
 from bot.utils.context import ThirteenContext
+from bot.utils.database import create_engine
 
 
 class Thirteen(commands.Bot):
@@ -31,7 +32,11 @@ class Thirteen(commands.Bot):
 
     Attributes
     ----------
-
+    is_first_run: :class:`bool`
+        A boolean that indicates if the bot is running for the first
+        time.
+    db: :class:`sqlalchemy.ext.asyncio.AsyncEngine`
+        The database connection engine.
     """
 
     def __init__(self):
@@ -40,6 +45,7 @@ class Thirteen(commands.Bot):
         intents.message_content = True
         super().__init__(command_prefix=get_prefix, intents=intents)
 
+        self.db = create_engine()
         self.is_first_run = True
 
     async def on_ready(self):
