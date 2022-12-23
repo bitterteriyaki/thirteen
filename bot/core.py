@@ -21,6 +21,8 @@ from rich import print
 from rich.table import Table
 from rich.box import ROUNDED
 
+from bot.utils.extensions import get_extensions
+
 
 class Thirteen(commands.Bot):
     """The main bot class. This class inherits from
@@ -33,6 +35,8 @@ class Thirteen(commands.Bot):
 
     def __init__(self):
         intents = discord.Intents.none()
+        intents.messages = True
+        intents.message_content = True
         super().__init__(command_prefix=get_prefix, intents=intents)
 
         self.is_first_run = True
@@ -57,6 +61,11 @@ class Thirteen(commands.Bot):
             print(table)
 
             self.is_first_run = False
+
+    async def setup_hook(self):
+        for extension in get_extensions():
+            await self.load_extension(extension)
+            print(f"[green]✦ Loaded extension [u]{extension}[/][/]")
 
 
 async def get_prefix(bot, message):
