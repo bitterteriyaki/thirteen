@@ -15,25 +15,4 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from discord.ext import commands
-
-
-class Owner(commands.Cog):
-    """Comandos exclusivos para o dono do bot."""
-
-    def __init__(self, bot):
-        self.bot = bot
-
-    async def cog_check(self, ctx):
-        return await self.bot.is_owner(ctx.author)
-
-    @commands.hybrid_command()
-    async def sync(self, ctx):
-        """Sincroniza os comandos do bot com o lado do Discord."""
-        synced = await ctx.bot.tree.sync()
-        message = f"Foram sincronizados `{len(synced)}` comandos."
-        await ctx.reply(message)
-
-
-async def setup(bot):
-    await bot.add_cog(Owner(bot))
+EMBED_COLOR = 0x2F3136

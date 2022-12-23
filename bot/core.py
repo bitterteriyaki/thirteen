@@ -22,6 +22,7 @@ from rich.table import Table
 from rich.box import ROUNDED
 
 from bot.utils.extensions import get_extensions
+from bot.utils.context import ThirteenContext
 
 
 class Thirteen(commands.Bot):
@@ -66,6 +67,9 @@ class Thirteen(commands.Bot):
         for extension in get_extensions():
             await self.load_extension(extension)
             print(f"[green]✦ Loaded extension [u]{extension}[/][/]")
+
+    async def get_context(self, message):
+        return await super().get_context(message, cls=ThirteenContext)
 
 
 async def get_prefix(bot, message):
