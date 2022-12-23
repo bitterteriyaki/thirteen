@@ -24,6 +24,7 @@ from rich.box import ROUNDED
 from bot.utils.extensions import get_extensions
 from bot.utils.context import ThirteenContext
 from bot.utils.database import create_engine
+from bot.utils.cache import create_cache
 
 
 class Thirteen(commands.Bot):
@@ -37,6 +38,8 @@ class Thirteen(commands.Bot):
         time.
     db: :class:`sqlalchemy.ext.asyncio.AsyncEngine`
         The database connection engine.
+    cache: :class:`redis.Redis`
+        The Redis cache connection.
     """
 
     def __init__(self):
@@ -45,8 +48,9 @@ class Thirteen(commands.Bot):
         intents.message_content = True
         super().__init__(command_prefix=get_prefix, intents=intents)
 
-        self.db = create_engine()
         self.is_first_run = True
+        self.db = create_engine()
+        self.cache = create_cache()
 
     async def on_ready(self):
         if self.is_first_run:

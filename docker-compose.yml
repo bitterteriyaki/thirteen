@@ -8,6 +8,11 @@ services:
     image: postgres
     volumes:
       - postgresql:/var/lib/postgresql/data
+  cache:
+    image: redis
+    volumes:
+      - redis:/data
 
 volumes:
   postgresql:
+  redis:

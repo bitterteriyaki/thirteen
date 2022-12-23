@@ -37,6 +37,17 @@ class ThirteenContext(Context):
         """
         return self.bot.db
 
+    @property
+    def cache(self):
+        """Returns the Redis cache connection.
+
+        Returns
+        -------
+        :class:`redis.Redis`
+            The Redis cache connection.
+        """
+        return self.bot.cache
+
     def get_embed(self, content):
         """This method is a factory method that creates an embed with
         the given content. The embed is created with the default color
