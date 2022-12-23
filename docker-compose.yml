@@ -1,0 +1,6 @@
+services:
+  bot:
+    build: .
+    command: python launcher.py
+    volumes:
+      - .:/bot

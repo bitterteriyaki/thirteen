@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "thirteen"
+version = "0.1.0"
+description = "A Discord bot written in Python for my server"
+authors = ["kyomi <personal@kyomi.codes>"]
+license = "GPL-3.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+discord-py = "^2.1.0"
+click = "^8.1.3"
+rich = "^12.6.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.20.0"
+black = "^22.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,5 @@
+services:
+  bot:
+    tty: true
+    env_file:
+      - .env
