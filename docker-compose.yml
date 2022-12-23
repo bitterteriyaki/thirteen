@@ -4,6 +4,9 @@ services:
     command: python launcher.py
     volumes:
       - .:/bot
+    depends_on:
+      - database
+      - cache
   database:
     image: postgres
     volumes:

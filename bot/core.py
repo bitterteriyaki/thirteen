@@ -73,6 +73,17 @@ class Thirteen(commands.Bot):
 
             self.is_first_run = False
 
+    async def on_message(self, message):
+        # ignore messages from bots and webhooks
+        if not isinstance(message.author, discord.Member):
+            return
+
+        if message.author.bot:
+            return
+
+        self.dispatch("regular_message", message)
+        await self.process_commands(message)
+
     async def setup_hook(self):
         for extension in get_extensions():
             await self.load_extension(extension)

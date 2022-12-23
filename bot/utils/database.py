@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
 
+from sqlalchemy import Column, BigInteger
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -34,3 +35,20 @@ def create_engine():
         The database connection engine.
     """
     return create_async_engine(os.environ["DATABASE_URL"])
+
+
+class LevelUser(Base):
+    """A model representing a user in the levels system.
+
+    Attributes
+    ----------
+    id: :class:`int`
+        The user's ID.
+    experience: :class:`int`
+        The user's experience.
+    """
+
+    __tablename__ = "levels"
+
+    id = Column(BigInteger, primary_key=True)
+    experience = Column(BigInteger, default=0, nullable=False)
