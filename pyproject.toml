@@ -20,10 +20,18 @@ sqlalchemy = {version = "^1.4.45", extras = ["asyncio"]}
 pre-commit = "^2.20.0"
 black = "^22.12.0"
 commitizen = "^2.38.0"
+isort = "^5.11.4"
 
 [tool.commitizen]
 version = "0.2.0"
 version_files = ["pyproject.toml"]
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
 
 [build-system]
 requires = ["poetry-core"]
