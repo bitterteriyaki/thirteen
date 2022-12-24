@@ -1,0 +1,21 @@
+services:
+  bot:
+    build: .
+    command: python launcher.py
+    volumes:
+      - .:/bot
+    depends_on:
+      - database
+      - cache
+  database:
+    image: postgres
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+  cache:
+    image: redis
+    volumes:
+      - redis:/data
+
+volumes:
+  postgresql:
+  redis:
