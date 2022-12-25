@@ -1,4 +1,19 @@
-## 0.2.0 (23/12/2022)
+## v0.3.0 (25/12/2022)
+
+### Features
+
+- `ext/levels`: add experience manipulation commands
+  - `t!exp` and `/exp profile` command
+  - `t!exp add` and `/exp add` command
+  - `t!exp remove` and `/exp remove` command
+  - `t!exp set` and `/exp set` command
+
+### Fixes
+
+- `ext`: add commands descriptions
+- `core`: fix `jsk exec` command bug
+
+## v0.2.0 (23/12/2022)
 
 ### Features
 
