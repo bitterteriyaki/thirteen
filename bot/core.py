@@ -81,8 +81,8 @@ class Thirteen(commands.Bot):
         if message.author.bot:
             return
 
-        self.dispatch("regular_message", message)
         await self.process_commands(message)
+        self.dispatch("regular_message", message)
 
     async def setup_hook(self):
         await self.load_extension("jishaku")

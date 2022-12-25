@@ -18,11 +18,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
 
 import click
+import humanize
 
 from bot.core import Thirteen
 
 
 def run_bot():
+    # active the `pt_BR` locale
+    humanize.i18n.activate("pt_BR")
+    # this following pull request was merged, but it's not released yet:
+    # https://github.com/python-humanize/humanize/pull/66
+    # so we need to set the decimal and thousand separators manually
+    humanize.i18n._DECIMAL_SEPARATOR["pt_BR"] = ","
+    humanize.i18n._THOUSANDS_SEPARATOR["pt_BR"] = "."
+
     bot = Thirteen()
     token = os.environ["TOKEN"]
 
