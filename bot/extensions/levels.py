@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import random
 from typing import Optional
 
-from discord import Embed, Member
+from discord import Embed, Member, app_commands
 from discord.ext import commands
 from discord.ext.commands import Author, BucketType, CooldownMapping
 from humanize import intcomma
@@ -173,6 +173,7 @@ class Levels(commands.Cog):
             await message.reply(embed=embed, mention_author=False)
 
     @commands.hybrid_group(fallback="profile")
+    @app_commands.describe(member="Usuário a ser verificado.")
     async def exp(self, ctx, member: Member = Author):
         """Verifica a sua experiência ou a de um usuário."""
         exp = await self.bot.cache.get(f"levels:{member.id}:experience") or 0
@@ -190,6 +191,10 @@ class Levels(commands.Cog):
 
     @exp.command(name="add")
     @commands.has_permissions(administrator=True)
+    @app_commands.describe(member="Usuário a receber a experiência.")
+    @app_commands.describe(
+        amount="Quantidade de experiência a ser adicionada.",
+    )
     async def exp_add(
         self,
         ctx,
@@ -208,6 +213,8 @@ class Levels(commands.Cog):
 
     @exp.command(name="remove")
     @commands.has_permissions(administrator=True)
+    @app_commands.describe(member="Usuário a perder a experiência.")
+    @app_commands.describe(amount="Quantidade de experiência a ser removida.")
     async def exp_remove(
         self,
         ctx,
@@ -226,6 +233,8 @@ class Levels(commands.Cog):
 
     @exp.command(name="set")
     @commands.has_permissions(administrator=True)
+    @app_commands.describe(member="Usuário a ter a experiência definida.")
+    @app_commands.describe(amount="Quantidade de experiência a ser definida.")
     async def exp_set(
         self,
         ctx,
