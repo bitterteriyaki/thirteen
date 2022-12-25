@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "thirteen"
-version = "0.2.0"
+version = "0.3.0"
 description = "A Discord bot written in Python for my server"
 authors = ["kyomi <personal@kyomi.codes>"]
 license = "GPL-3.0"
@@ -26,7 +26,8 @@ isort = "^5.11.4"
 flake8 = "^6.0.0"
 
 [tool.commitizen]
-version = "0.2.0"
+version = "0.3.0"
+tag_format = "v$major.$minor.$patch$prerelease"
 version_files = ["pyproject.toml"]
 
 [tool.black]
