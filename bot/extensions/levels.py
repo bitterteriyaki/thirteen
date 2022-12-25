@@ -16,15 +16,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import random
+from typing import Optional
 
-from discord import Embed
+from discord import Embed, Member, app_commands
 from discord.ext import commands
-from discord.ext.commands import CooldownMapping, BucketType
+from discord.ext.commands import Author, BucketType, CooldownMapping
+from humanize import intcomma
 from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert
 
-from bot.utils.database import LevelUser
 from bot.utils.constants import EMBED_COLOR
+from bot.utils.database import LevelUser
+from bot.utils.formats import human_format, progress_bar
 
 
 class Levels(commands.Cog):
@@ -56,7 +59,7 @@ class Levels(commands.Cog):
             await self.bot.cache.setnx(f"levels:{user_id}:experience", exp)
 
     async def add_experience(self, user_id, value):
-        """Adds experience to a user. If the user doesn't exist in the
+        """Adds experience to an user. If the user doesn't exist in the
         database, it will be created.
 
         Parameters
@@ -82,6 +85,64 @@ class Levels(commands.Cog):
             await conn.commit()
 
         await self.bot.cache.incrby(f"levels:{user_id}:experience", value)
+
+    async def remove_experience(self, user_id, value):
+        """Removes experience to an user. If the user doesn't exist in
+        the database, nothing will happen. If the value is greater than
+        the user's experience, it will be clamped to 0.
+
+        Parameters
+        ----------
+        user_id: :class:`int`
+            The user ID.
+        value: :class:`int`
+            The amount of experience to add.
+        """
+        async with self.bot.db.connect() as conn:
+            stmt = select(LevelUser).where(LevelUser.id == user_id)
+            user = (await conn.execute(stmt)).first()
+
+            if user is None:
+                return
+
+            value = min(value, user.experience)
+
+            await conn.execute(
+                update(LevelUser)
+                .where(LevelUser.id == user_id)
+                .values(experience=LevelUser.experience - value)
+            )
+            await conn.commit()
+
+        await self.bot.cache.decrby(f"levels:{user_id}:experience", value)
+
+    async def set_experience(self, user_id, value):
+        """Sets experience to an user. If the user doesn't exist in the
+        database, it will be created.
+
+        Parameters
+        ----------
+        user_id: :class:`int`
+            The user ID.
+        value: :class:`int`
+            The amount of experience to add.
+        """
+        async with self.bot.db.connect() as conn:
+            insert_stmt = insert(LevelUser).values(id=user_id)
+            stmt = insert_stmt.on_conflict_do_nothing()
+
+            await conn.execute(stmt)
+            await conn.commit()
+
+        async with self.bot.db.connect() as conn:
+            await conn.execute(
+                update(LevelUser)
+                .where(LevelUser.id == user_id)
+                .values(experience=value)
+            )
+            await conn.commit()
+
+        await self.bot.cache.set(f"levels:{user_id}:experience", value)
 
     @commands.Cog.listener()
     async def on_regular_message(self, message):
@@ -110,6 +171,85 @@ class Levels(commands.Cog):
             embed = Embed(description=content, color=EMBED_COLOR)
             embed.set_author(name=author.display_name, icon_url=avatar.url)
             await message.reply(embed=embed, mention_author=False)
+
+    @commands.hybrid_group(fallback="profile")
+    @app_commands.describe(member="Usuário a ser verificado.")
+    async def exp(self, ctx, member: Member = Author):
+        """Verifica a sua experiência ou a de um usuário."""
+        exp = await self.bot.cache.get(f"levels:{member.id}:experience") or 0
+        level = self.get_level_from_exp(exp)
+
+        used_exp = exp - sum(self.get_level_exp(i) for i in range(level))
+        percentage = (used_exp / self.get_level_exp(level)) * 100
+
+        content = (
+            f"Experiência: **{human_format(exp)}**\n"
+            f"Nível: **{intcomma(level)}**\n\n"
+            f"`{progress_bar(percentage)}`"
+        )
+        await ctx.reply(content)
+
+    @exp.command(name="add")
+    @commands.has_permissions(administrator=True)
+    @app_commands.describe(member="Usuário a receber a experiência.")
+    @app_commands.describe(
+        amount="Quantidade de experiência a ser adicionada.",
+    )
+    async def exp_add(
+        self,
+        ctx,
+        member: Optional[Member] = Author,
+        *,
+        amount: int,
+    ):
+        """Adiciona experiência a um usuário."""
+        await self.add_experience(member.id, amount)
+
+        message = (
+            f"Adicionei `{intcomma(amount)}` de experiência "
+            f"a {member.mention}."
+        )
+        await ctx.reply(message)
+
+    @exp.command(name="remove")
+    @commands.has_permissions(administrator=True)
+    @app_commands.describe(member="Usuário a perder a experiência.")
+    @app_commands.describe(amount="Quantidade de experiência a ser removida.")
+    async def exp_remove(
+        self,
+        ctx,
+        member: Optional[Member] = Author,
+        *,
+        amount: int,
+    ):
+        """Remove experiência de um usuário."""
+        await self.remove_experience(member.id, amount)
+
+        message = (
+            f"Removi `{intcomma(amount)}` de experiência "
+            f"de {member.mention}."
+        )
+        await ctx.reply(message)
+
+    @exp.command(name="set")
+    @commands.has_permissions(administrator=True)
+    @app_commands.describe(member="Usuário a ter a experiência definida.")
+    @app_commands.describe(amount="Quantidade de experiência a ser definida.")
+    async def exp_set(
+        self,
+        ctx,
+        member: Optional[Member] = Author,
+        *,
+        amount: int,
+    ):
+        """Define a experiência de um usuário."""
+        await self.set_experience(member.id, amount)
+
+        message = (
+            f"Defini a experiência de {member.mention} "
+            f"para `{intcomma(amount)}`."
+        )
+        await ctx.reply(message)
 
 
 async def setup(bot):

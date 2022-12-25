@@ -18,13 +18,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import discord
 from discord.ext import commands
 from rich import print
-from rich.table import Table
 from rich.box import ROUNDED
+from rich.table import Table
 
-from bot.utils.extensions import get_extensions
+from bot.utils.cache import create_cache
 from bot.utils.context import ThirteenContext
 from bot.utils.database import create_engine
-from bot.utils.cache import create_cache
+from bot.utils.extensions import get_extensions
 
 
 class Thirteen(commands.Bot):
@@ -81,16 +81,18 @@ class Thirteen(commands.Bot):
         if message.author.bot:
             return
 
-        self.dispatch("regular_message", message)
         await self.process_commands(message)
+        self.dispatch("regular_message", message)
 
     async def setup_hook(self):
+        await self.load_extension("jishaku")
+
         for extension in get_extensions():
             await self.load_extension(extension)
             print(f"[green]✦ Loaded extension [u]{extension}[/][/]")
 
-    async def get_context(self, message):
-        return await super().get_context(message, cls=ThirteenContext)
+    async def get_context(self, message, *, cls=ThirteenContext):
+        return await super().get_context(message, cls=cls)
 
 
 async def get_prefix(bot, message):

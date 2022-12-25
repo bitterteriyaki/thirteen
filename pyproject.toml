@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "thirteen"
-version = "0.2.0"
+version = "0.3.0"
 description = "A Discord bot written in Python for my server"
 authors = ["kyomi <personal@kyomi.codes>"]
 license = "GPL-3.0"
@@ -15,15 +15,27 @@ asyncpg = "^0.27.0"
 redis = "^4.4.0"
 alembic = "^1.9.0"
 sqlalchemy = {version = "^1.4.45", extras = ["asyncio"]}
+jishaku = "^2.5.1"
+humanize = "^4.4.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^2.20.0"
 black = "^22.12.0"
 commitizen = "^2.38.0"
+isort = "^5.11.4"
+flake8 = "^6.0.0"
 
 [tool.commitizen]
-version = "0.2.0"
+version = "0.3.0"
+tag_format = "v$major.$minor.$patch$prerelease"
 version_files = ["pyproject.toml"]
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
 
 [build-system]
 requires = ["poetry-core"]
