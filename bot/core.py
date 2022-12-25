@@ -91,8 +91,8 @@ class Thirteen(commands.Bot):
             await self.load_extension(extension)
             print(f"[green]✦ Loaded extension [u]{extension}[/][/]")
 
-    async def get_context(self, message):
-        return await super().get_context(message, cls=ThirteenContext)
+    async def get_context(self, message, *, cls=ThirteenContext):
+        return await super().get_context(message, cls=cls)
 
 
 async def get_prefix(bot, message):
