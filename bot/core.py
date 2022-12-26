@@ -46,6 +46,7 @@ class Thirteen(commands.Bot):
         intents = discord.Intents.none()
         intents.messages = True
         intents.message_content = True
+        intents.guilds = True
         super().__init__(command_prefix=get_prefix, intents=intents)
 
         self.is_first_run = True
