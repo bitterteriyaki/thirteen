@@ -16,3 +16,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 EMBED_COLOR = 0x2F3136
+
+LOG_CHANNEL_ID = 1027574658461089883

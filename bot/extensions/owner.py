@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+from discord import app_commands
 from discord.ext import commands
 
 
@@ -28,11 +29,11 @@ class Owner(commands.Cog):
         return await self.bot.is_owner(ctx.author)
 
     @commands.hybrid_command()
+    @app_commands.default_permissions(administrator=True)
     async def sync(self, ctx):
         """Sincroniza os comandos do bot com o lado do Discord."""
         synced = await ctx.bot.tree.sync()
-        message = f"Foram sincronizados `{len(synced)}` comandos."
-        await ctx.reply(message)
+        await ctx.reply(f"Foram sincronizados `{len(synced)}` comandos.")
 
 
 async def setup(bot):
