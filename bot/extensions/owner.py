@@ -31,8 +31,7 @@ class Owner(commands.Cog):
     async def sync(self, ctx):
         """Sincroniza os comandos do bot com o lado do Discord."""
         synced = await ctx.bot.tree.sync()
-        message = f"Foram sincronizados `{len(synced)}` comandos."
-        await ctx.reply(message)
+        await ctx.reply(f"Foram sincronizados `{len(synced)}` comandos.")
 
 
 async def setup(bot):
