@@ -17,10 +17,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
 
-from sqlalchemy import Column, BigInteger
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import BigInteger, Column
 from sqlalchemy.ext.asyncio import create_async_engine
-
+from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
@@ -38,7 +37,7 @@ def create_engine():
 
 
 class LevelUser(Base):
-    """A model representing a user in the levels system.
+    """A model representing a user in the leveling system.
 
     Attributes
     ----------
