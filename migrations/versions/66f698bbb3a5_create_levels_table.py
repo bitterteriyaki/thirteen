@@ -5,9 +5,8 @@ Revises:
 Create Date: 2022-12-23 19:11:28.997018
 """
 
-from alembic.op import create_table, drop_column
-from sqlalchemy import Column, BigInteger
-
+from alembic.op import create_table, drop_table
+from sqlalchemy import BigInteger, Column
 
 # revision identifiers, used by Alembic.
 revision = "66f698bbb3a5"
@@ -25,4 +24,4 @@ def upgrade():
 
 
 def downgrade():
-    drop_column("levels")
+    drop_table("levels")
