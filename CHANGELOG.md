@@ -1,3 +1,17 @@
+## v0.4.0 (25/12/2022)
+
+### Features
+
+- `ext/mod`: add initial moderation extension
+
+### Fixes
+
+- `ext/owner`: add default permissions for `sync` command
+
+### Refactors
+
+- `ext/owner`: remove useless variable
+
 ## v0.3.0 (25/12/2022)
 
 ### Features
