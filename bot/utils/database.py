@@ -51,3 +51,20 @@ class LevelUser(Base):
 
     id = Column(BigInteger, primary_key=True)
     experience = Column(BigInteger, default=0, nullable=False)
+
+
+class CurrencyUser(Base):
+    """A model representing a user in the currency system.
+
+    Attributes
+    ----------
+    id: :class:`int`
+        The user's ID.
+    balance: :class:`int`
+        The user's balance.
+    """
+
+    __tablename__ = "currency"
+
+    id = Column(BigInteger, primary_key=True)
+    balance = Column(BigInteger, default=0, nullable=False)
