@@ -191,6 +191,7 @@ class Levels(commands.Cog):
 
     @exp.command(name="add")
     @commands.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     @app_commands.describe(member="Usuário a receber a experiência.")
     @app_commands.describe(
         amount="Quantidade de experiência a ser adicionada.",
@@ -213,6 +214,7 @@ class Levels(commands.Cog):
 
     @exp.command(name="remove")
     @commands.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     @app_commands.describe(member="Usuário a perder a experiência.")
     @app_commands.describe(amount="Quantidade de experiência a ser removida.")
     async def exp_remove(
@@ -233,6 +235,7 @@ class Levels(commands.Cog):
 
     @exp.command(name="set")
     @commands.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     @app_commands.describe(member="Usuário a ter a experiência definida.")
     @app_commands.describe(amount="Quantidade de experiência a ser definida.")
     async def exp_set(

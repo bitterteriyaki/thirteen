@@ -1,3 +1,14 @@
+## v0.5.0 (26/12/2022)
+
+### Features
+
+- `ext/currency`: add initial currency system
+
+### Fixes
+
+- `ext/levels`: add default permissions for experience manipulation commands
+- `migrations`: fix wrong import
+
 ## v0.4.0 (25/12/2022)
 
 ### Features
